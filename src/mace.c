@@ -6,59 +6,26 @@
 //  Copyright © 2019 Zakhary Kaplan. All rights reserved.
 //
 
+#include "mace.h"
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "matrix.h"
-
-#define MAX 100
-#define WORKSPACE_SIZE 64
-#define ANS -99
-
-// Function prototypes
-void mace(void);
-// Secondary functions
-int validateInput(char *[]);
-void printEntry(int, Matrix[], int);
-void printAns(Matrix);
-void addToWorkspace(int *, Matrix[], Matrix);
-int tagExists(int *, char *[], char[]);
-// Commands
-void help(char[]);
-void print(char[], int, Matrix[], Matrix);
-void clr(int *, Matrix[], Matrix *);
-Matrix mat(char[], Matrix);
-Matrix ident(char input[]);
-Matrix zeros(char[]);
-Matrix add(char[], Matrix[], Matrix);
-Matrix sub(char[], Matrix[], Matrix);
-Matrix mul(char[], Matrix[], Matrix);
-Matrix scl(char[], Matrix[], Matrix);
-Matrix trnsp(char[], Matrix[], Matrix);
-Matrix inv(char[], Matrix[], Matrix);
-Matrix det(char[], Matrix[], Matrix);
-Matrix trc(char[], Matrix[], Matrix);
 
 // TODO: Add "ans" as input
 // TODO: Prompt for invalid user function inputs
 
-// Main function
-int main(void) {
-    mace();
-
-    return EXIT_SUCCESS;
-}
 
 void mace(void) {
     printf("---------------------------------------------------------------\n");
     printf("Welcome to the Matrix Arithmetic C-language Environment (Mace).\n");
     printf("Copyright © 2019 Zakhary Kaplan. All rights reserved.\n");
-    printf(
-        "---------------------------------------------------------------\n\n");
-    printf(
-        "Mace is a matrix arithmetic environment programmed in C.\n"
-        "It uses bash-like syntax to perform matrix operations.\n\n");
+    printf("---------------------------------------------------------------\n\n");
+    printf("Mace is a matrix arithmetic environment programmed in C.\n"
+           "It uses bash-like syntax to perform matrix operations.\n\n");
     printf("Type \"help\" to see a list of commands.\n");
 
     // Allocate memory for for workspace, user input
@@ -209,8 +176,7 @@ void mace(void) {
     }
 }
 
-// Secondary functions
-
+// -- Secondary functions --
 int validateInput(char *input[]) {
     // Constant array of valid commands
     const char *commands[] = {"\n",    "help",  "bye", "print", "clr", "mat",
@@ -281,11 +247,8 @@ int tagExists(int *size, char *tags[], char tag[]) {
     return 0;
 }
 
-// Commands
-
+// -- Commands --
 void help(char input[]) {
-    // printf("Matrix Arithmetic C-language Environment - Help Menu:\n");
-
     char argv[MAX];       // Create copy of argument input
     int helpCommandType;  // Get command type of input
     // Check if input is not null
@@ -620,7 +583,7 @@ void print(char input[], int size, Matrix workspace[], Matrix ans) {
         // Print each operand
         for (int i = 0; i < argc; i++) {
             // Determine operand
-            Matrix operand = (argv[i] == ANS) ? ans : workspace[argv[i]];
+            Matrix operand = (argv[i] == ANS) ? ans : workspace[(unsigned)argv[i]];
 
             // Print non null operands
             if (!isNull(operand)) {
@@ -787,8 +750,8 @@ Matrix add(char input[], Matrix workspace[], Matrix ans) {
     // Count parameters
     if (argc == 2) {
         Matrix operands[2];  // Determine operands
-        operands[0] = (argv[0] == ANS) ? ans : workspace[argv[0]];
-        operands[1] = (argv[1] == ANS) ? ans : workspace[argv[1]];
+        operands[0] = (argv[0] == ANS) ? ans : workspace[(unsigned)argv[0]];
+        operands[1] = (argv[1] == ANS) ? ans : workspace[(unsigned)argv[1]];
 
         // Calculate output
         Matrix output = addMat(operands[0], operands[1]);
@@ -820,7 +783,7 @@ Matrix add(char input[], Matrix workspace[], Matrix ans) {
 }
 
 Matrix sub(char input[], Matrix workspace[], Matrix ans) {
-    int argc = 0, ansInput = 0;
+    int argc = 0;
     char argv[MAX];
 
     // Split input
@@ -841,8 +804,8 @@ Matrix sub(char input[], Matrix workspace[], Matrix ans) {
     // Count parameters
     if (argc == 2) {
         Matrix operands[2];  // Determine operands
-        operands[0] = (argv[0] == ANS) ? ans : workspace[argv[0]];
-        operands[1] = (argv[1] == ANS) ? ans : workspace[argv[1]];
+        operands[0] = (argv[0] == ANS) ? ans : workspace[(unsigned)argv[0]];
+        operands[1] = (argv[1] == ANS) ? ans : workspace[(unsigned)argv[1]];
 
         // Calculate output
         Matrix output = addMat(operands[0], coeffMat(-1, operands[1]));
@@ -874,7 +837,7 @@ Matrix sub(char input[], Matrix workspace[], Matrix ans) {
 }
 
 Matrix mul(char input[], Matrix workspace[], Matrix ans) {
-    int argc = 0, ansInput = 0;
+    int argc = 0;
     char argv[MAX];
 
     // Split input
@@ -895,8 +858,8 @@ Matrix mul(char input[], Matrix workspace[], Matrix ans) {
     // Count parameters
     if (argc == 2) {
         Matrix operands[2];  // Determine operands
-        operands[0] = (argv[0] == ANS) ? ans : workspace[argv[0]];
-        operands[1] = (argv[1] == ANS) ? ans : workspace[argv[1]];
+        operands[0] = (argv[0] == ANS) ? ans : workspace[(unsigned)argv[0]];
+        operands[1] = (argv[1] == ANS) ? ans : workspace[(unsigned)argv[1]];
 
         // Calculate output
         Matrix output = mulMat(operands[0], operands[1]);
@@ -1013,7 +976,7 @@ Matrix trnsp(char input[], Matrix workspace[], Matrix ans) {
     // Count parameters
     if (argc == 1) {
         // Determine operand
-        Matrix operand = (argv[0] == ANS) ? ans : workspace[argv[0]];
+        Matrix operand = (argv[0] == ANS) ? ans : workspace[(unsigned)argv[0]];
 
         // Calculate output
         Matrix output = transpose(operand);
@@ -1062,7 +1025,7 @@ Matrix inv(char input[], Matrix workspace[], Matrix ans) {
     // Count parameters
     if (argc == 1) {
         // Determine operand
-        Matrix operand = (argv[0] == ANS) ? ans : workspace[argv[0]];
+        Matrix operand = (argv[0] == ANS) ? ans : workspace[(unsigned)argv[0]];
 
         if (isSquare(operand)) {
             // Calculate output
@@ -1117,7 +1080,7 @@ Matrix det(char input[], Matrix workspace[], Matrix ans) {
     // Count parameters
     if (argc == 1) {
         // Determine operand
-        Matrix operand = (argv[0] == ANS) ? ans : workspace[argv[0]];
+        Matrix operand = (argv[0] == ANS) ? ans : workspace[(unsigned)argv[0]];
 
         if (isSquare(operand)) {
             // Calculate output
@@ -1180,7 +1143,7 @@ Matrix trc(char input[], Matrix workspace[], Matrix ans) {
     // Count parameters
     if (argc == 1) {
         // Determine operand
-        Matrix operand = (argv[0] == ANS) ? ans : workspace[argv[0]];
+        Matrix operand = (argv[0] == ANS) ? ans : workspace[(unsigned)argv[0]];
 
         if (isSquare(operand)) {
             // Calculate output

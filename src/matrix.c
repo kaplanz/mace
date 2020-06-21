@@ -7,6 +7,7 @@
 //
 
 #include "matrix.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -15,6 +16,7 @@
 
 // TODO: Function descriptions
 // TODO: Fix memory leaks on all functions that return a matrix
+
 
 Matrix identityMat(int n) {
     // Return NULL for invalid dimenstion
@@ -118,8 +120,7 @@ int isNull(Matrix A) { return (A.m == 0) && (A.n == 0) && (A.data == 0); }
 
 int isSquare(Matrix A) { return (A.m == A.n); }
 
-// Unary Operations
-
+// -- Unary operations --
 Matrix transpose(Matrix A) {
     Matrix transpA = emptyMat(A.n, A.m);
 
@@ -187,8 +188,7 @@ Matrix minor(Matrix A, int row, int col) {
     return minorA;
 }
 
-// Binary Operations
-
+// -- Binary operations --
 Matrix coeffMat(double coeff, Matrix A) {
     Matrix coeffA = copyMat(A);
 
@@ -235,8 +235,7 @@ Matrix mulMat(Matrix A, Matrix B) {
     return C;  // Must be freed
 }
 
-// Special Arithmetic
-
+// -- Special arithmetic --
 double determinant(Matrix A) {
     // Return early on bad dimenstions
     if (!isSquare(A)) return 0;
