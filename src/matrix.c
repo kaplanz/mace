@@ -12,7 +12,9 @@
 #include <stdlib.h>
 
 #define NULL_MATRIX \
-    (Matrix) { 0, 0, 0 }
+    (Matrix) {      \
+        0, 0, 0     \
+    }
 
 // TODO: Function descriptions
 // TODO: Fix memory leaks on all functions that return a matrix
@@ -20,7 +22,8 @@
 
 Matrix identityMat(int n) {
     // Return NULL for invalid dimenstion
-    if (n < 1) return NULL_MATRIX;
+    if (n < 1)
+        return NULL_MATRIX;
 
     Matrix I;
     // Initialize dimensions of matrix
@@ -50,7 +53,8 @@ Matrix identityMat(int n) {
 
 Matrix emptyMat(int m, int n) {
     // Return NULL for invalid dimenstions
-    if (m < 1 || n < 1) return NULL_MATRIX;
+    if (m < 1 || n < 1)
+        return NULL_MATRIX;
 
     Matrix A;
     // Initialize dimensions of matrix
@@ -77,7 +81,7 @@ Matrix emptyMat(int m, int n) {
 
 Matrix doubleToMat(double x) {
     Matrix A = emptyMat(1, 1);
-    A.data[0][0] = x;  // Set value of data field to input
+    A.data[0][0] = x; // set value of data field to input
     return A;
 }
 
@@ -110,15 +114,20 @@ void printMat(Matrix A) {
         for (int j = 0; j < A.n; j++) {
             printf("% 6.3g", A.data[i][j]);
 
-            if (j + 1 < A.n) printf(" ");
+            if (j + 1 < A.n)
+                printf(" ");
         }
         printf("\n");
     }
 }
 
-int isNull(Matrix A) { return (A.m == 0) && (A.n == 0) && (A.data == 0); }
+int isNull(Matrix A) {
+    return (A.m == 0) && (A.n == 0) && (A.data == 0);
+}
 
-int isSquare(Matrix A) { return (A.m == A.n); }
+int isSquare(Matrix A) {
+    return (A.m == A.n);
+}
 
 // -- Unary operations --
 Matrix transpose(Matrix A) {
@@ -134,22 +143,23 @@ Matrix transpose(Matrix A) {
 }
 
 Matrix inverse(Matrix A) {
-    double detA = determinant(A);  // Calculate determinant of matrix
+    double detA = determinant(A); // calculate determinant of matrix
 
     // Return early on non-invertible matricies
-    if (!detA) return NULL_MATRIX;
+    if (!detA)
+        return NULL_MATRIX;
 
     // Calculate cofactor matrix
     Matrix cofactorA = copyMat(A);
     for (int i = 0; i < A.m; i++) {
         for (int j = 0; j < A.n; j++) {
-            int sign = ((i + j) % 2) ? -1 : 1;  // Determine sign of term
-            Matrix minorA = minor(A, i, j);     // Create minor at index
+            int sign = ((i + j) % 2) ? -1 : 1; // determine sign of term
+            Matrix minorA = minor(A, i, j); // create minor at index
 
             // Add determinant of minor to total
             cofactorA.data[i][j] = sign * determinant(minorA);
 
-            deleteMat(&minorA);  // Delete minor
+            deleteMat(&minorA); // delete minor
         }
     }
 
@@ -169,10 +179,12 @@ Matrix inverse(Matrix A) {
 
 Matrix minor(Matrix A, int row, int col) {
     // Return early on bad minor indicies
-    if (row >= A.m || row < 0 || col >= A.n || col < 0) return NULL_MATRIX;
+    if (row >= A.m || row < 0 || col >= A.n || col < 0)
+        return NULL_MATRIX;
 
     // Return [1] on matrix with dimension of 1
-    if (A.m == 1 || A.n == 1) return doubleToMat(1);
+    if (A.m == 1 || A.n == 1)
+        return doubleToMat(1);
 
     Matrix minorA = emptyMat(A.m - 1, A.n - 1);
 
@@ -203,7 +215,8 @@ Matrix coeffMat(double coeff, Matrix A) {
 
 Matrix addMat(Matrix A, Matrix B) {
     // Return early on mismatched dimenstions
-    if ((A.m != B.m) || (A.n != B.n)) return NULL_MATRIX;
+    if ((A.m != B.m) || (A.n != B.n))
+        return NULL_MATRIX;
 
     Matrix C = emptyMat(A.m, A.n);
 
@@ -213,12 +226,13 @@ Matrix addMat(Matrix A, Matrix B) {
         }
     }
 
-    return C;  // Must be freed
+    return C; // must be freed
 }
 
 Matrix mulMat(Matrix A, Matrix B) {
     // Return early on mismatched dimenstions
-    if (A.n != B.m) return NULL_MATRIX;
+    if (A.n != B.m)
+        return NULL_MATRIX;
 
     Matrix C = emptyMat(A.m, B.n);
 
@@ -232,18 +246,19 @@ Matrix mulMat(Matrix A, Matrix B) {
         }
     }
 
-    return C;  // Must be freed
+    return C; // must be freed
 }
 
 // -- Special arithmetic --
 double determinant(Matrix A) {
     // Return early on bad dimenstions
-    if (!isSquare(A)) return 0;
+    if (!isSquare(A))
+        return 0;
 
     // Base cases (1x1 or 2x2)
-    if (A.m == 1) {  // Determinant of 1x1 is itself
+    if (A.m == 1) { // Determinant of 1x1 is itself
         return A.data[0][0];
-    } else if (A.m == 2) {  // Determinant of 2x2 is "ad - bc"
+    } else if (A.m == 2) { // Determinant of 2x2 is "ad - bc"
         return (A.data[0][0] * A.data[1][1]) - (A.data[0][1] * A.data[1][0]);
     }
 
@@ -252,13 +267,13 @@ double determinant(Matrix A) {
 
     // Uses first row for determinant
     for (int i = 0; i < A.n; i++) {
-        int sign = (i % 2) ? -1 : 1;     // Determine sign of term
-        Matrix minorA = minor(A, 0, i);  // Create minor at index
+        int sign = (i % 2) ? -1 : 1; // determine sign of term
+        Matrix minorA = minor(A, 0, i); // create minor at index
 
         // Add determinant of minor to total
         detA += sign * A.data[0][i] * determinant(minorA);
 
-        deleteMat(&minorA);  // Delete minor
+        deleteMat(&minorA); // delete minor
     }
 
     return detA;
@@ -266,11 +281,13 @@ double determinant(Matrix A) {
 
 double trace(Matrix A) {
     // Return early on bad dimenstions
-    if (!isSquare(A)) return 0;
+    if (!isSquare(A))
+        return 0;
 
     double traceA = 0;
 
-    for (int i = 0; i < A.m; i++) traceA += A.data[i][i];
+    for (int i = 0; i < A.m; i++)
+        traceA += A.data[i][i];
 
     return traceA;
 }

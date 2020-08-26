@@ -10,7 +10,9 @@
 #define MATRIX_H
 
 #define NULL_MATRIX \
-    (Matrix) { 0, 0, 0 }
+    (Matrix) {      \
+        0, 0, 0     \
+    }
 
 // Declare matrix structure
 typedef struct matrix {
