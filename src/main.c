@@ -8,7 +8,7 @@
 
 #include <stdlib.h>
 
-#include "mace.h"
+#include "mace/mace.h"
 
 
 int main(void) {

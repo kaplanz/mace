@@ -6,7 +6,7 @@
 //  Copyright © 2019 Zakhary Kaplan. All rights reserved.
 //
 
-#include "matrix.h"
+#include "mace/matrix.h"
 
 #include <stdio.h>
 #include <stdlib.h>

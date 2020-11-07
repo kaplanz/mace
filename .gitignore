@@ -51,5 +51,9 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# Build directory
-/build/
+# Build directories
+bin/
+build/
+
+# Tag index files
+tags

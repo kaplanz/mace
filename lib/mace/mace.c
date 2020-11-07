@@ -6,14 +6,14 @@
 //  Copyright © 2019 Zakhary Kaplan. All rights reserved.
 //
 
-#include "mace.h"
+#include "mace/mace.h"
 
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "matrix.h"
+#include "mace/matrix.h"
 
 // TODO: Add "ans" as input
 // TODO: Prompt for invalid user function inputs
