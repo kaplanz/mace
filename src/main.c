@@ -10,7 +10,6 @@
 
 #include "mace/mace.h"
 
-
 int main(void) {
     mace();
 

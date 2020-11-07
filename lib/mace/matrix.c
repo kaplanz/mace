@@ -19,7 +19,6 @@
 // TODO: Function descriptions
 // TODO: Fix memory leaks on all functions that return a matrix
 
-
 Matrix identityMat(int n) {
     // Return NULL for invalid dimenstion
     if (n < 1)

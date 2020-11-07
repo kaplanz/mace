@@ -18,12 +18,12 @@
 // TODO: Add "ans" as input
 // TODO: Prompt for invalid user function inputs
 
-
 void mace(void) {
     printf("---------------------------------------------------------------\n");
     printf("Welcome to the Matrix Arithmetic C-language Environment (Mace).\n");
     printf("Copyright © 2019 Zakhary Kaplan. All rights reserved.\n");
-    printf("---------------------------------------------------------------\n\n");
+    printf(
+        "---------------------------------------------------------------\n\n");
     printf("Mace is a matrix arithmetic environment programmed in C.\n"
            "It uses bash-like syntax to perform matrix operations.\n\n");
     printf("Type \"help\" to see a list of commands.\n");
@@ -197,7 +197,8 @@ int validateInput(char *input[]) {
         "det",
         "trc",
     };
-    const int NUM_COMMANDS = sizeof(commands) / sizeof(char *); // number of valid commands
+    const int NUM_COMMANDS = sizeof(commands) /
+                             sizeof(char *); // number of valid commands
 
     // Create command token
     char *token = strtok(*input, " "); // " ("
@@ -221,7 +222,10 @@ int validateInput(char *input[]) {
 
 void printEntry(int size, Matrix workspace[], int index) {
     printf("\n");
-    printf("Mat%c (%dx%d) = \n", index + 'A', workspace[index].m, workspace[index].n);
+    printf("Mat%c (%dx%d) = \n",
+           index + 'A',
+           workspace[index].m,
+           workspace[index].n);
     printMat(workspace[index]);
     printf("\n");
 }
@@ -284,8 +288,9 @@ void help(char input[]) {
             printf("Description:\n");
             printf("\t- Display help menu for Mace commands.\n");
             printf("\t- Call without parameters for quick help menu.\n");
-            printf("\t- Command name parameters specify individual command help "
-                   "menu.\n");
+            printf(
+                "\t- Command name parameters specify individual command help "
+                "menu.\n");
 
             printf("Parameters: string command (optional)\n");
 
@@ -529,7 +534,8 @@ void print(char input[], int size, Matrix workspace[], Matrix ans) {
     char argv[MAX];
 
     // Split input
-    for (char *token = strtok(input, " "); token; token = strtok(NULL, " ")) { // " ,"
+    for (char *token = strtok(input, " "); token;
+         token = strtok(NULL, " ")) { // " ,"
 
         // Get matrix identifier
         if (strlen(token) == 1)
@@ -560,7 +566,8 @@ void print(char input[], int size, Matrix workspace[], Matrix ans) {
         // Print each operand
         for (int i = 0; i < argc; i++) {
             // Determine operand
-            Matrix operand = (argv[i] == ANS) ? ans : workspace[(unsigned)argv[i]];
+            Matrix operand = (argv[i] == ANS) ? ans :
+                                                workspace[(unsigned)argv[i]];
 
             // Print non null operands
             if (!isNull(operand)) {
@@ -573,8 +580,9 @@ void print(char input[], int size, Matrix workspace[], Matrix ans) {
             } else { // Display error message for null operands
                 // Check if ans was used while null
                 if (isNull(ans) && (argv[i] == ANS)) {
-                    printf("Error: perform an operation before attempting to use "
-                           "ans.\n");
+                    printf(
+                        "Error: perform an operation before attempting to use "
+                        "ans.\n");
                 } else {
                     printf("Error: operand #%d not recognized.\n", i + 1);
                 }
@@ -630,7 +638,8 @@ Matrix mat(char input[], Matrix ans) {
         }
     } else if (argc % rows == 0) { // Only create matrix if no mismatch
         int cols = argc / rows;
-        Matrix output = emptyMat(rows, cols); // create empty matrix of correct size
+        Matrix output = emptyMat(rows,
+                                 cols); // create empty matrix of correct size
 
         // Delineate data, and populate matrix
         for (int i = 0; i < argc; i++) {
@@ -651,7 +660,8 @@ Matrix ident(char input[]) {
     int argv[MAX];
 
     // Split input
-    for (char *token = strtok(input, " "); token; token = strtok(NULL, " ")) { // " ,"
+    for (char *token = strtok(input, " "); token;
+         token = strtok(NULL, " ")) { // " ,"
         argv[argc++] = atoi(token);
     }
 
@@ -676,7 +686,8 @@ Matrix zeros(char input[]) {
     int argv[MAX];
 
     // Split input
-    for (char *token = strtok(input, " "); token; token = strtok(NULL, " ")) { // " ,"
+    for (char *token = strtok(input, " "); token;
+         token = strtok(NULL, " ")) { // " ,"
         argv[argc++] = atoi(token);
     }
 
@@ -702,7 +713,8 @@ Matrix add(char input[], Matrix workspace[], Matrix ans) {
     char argv[MAX];
 
     // Split input
-    for (char *token = strtok(input, " "); token; token = strtok(NULL, " ")) { // " ,"
+    for (char *token = strtok(input, " "); token;
+         token = strtok(NULL, " ")) { // " ,"
 
         // Get matrix identifier
         if (strlen(token) == 1)
@@ -730,7 +742,8 @@ Matrix add(char input[], Matrix workspace[], Matrix ans) {
             if (isNull(ans) && (argv[0] == ANS || argv[1] == ANS)) {
                 printf("Error: perform an operation before attempting to use "
                        "ans.\n");
-            } else if (isNull(operands[0]) || isNull(operands[1])) { // Operand is null
+            } else if (isNull(operands[0]) ||
+                       isNull(operands[1])) { // Operand is null
                 printf("Error: operand not recognized.\n");
             } else {
                 printf("Error: incompatible operands. Try again with "
@@ -752,7 +765,8 @@ Matrix sub(char input[], Matrix workspace[], Matrix ans) {
     char argv[MAX];
 
     // Split input
-    for (char *token = strtok(input, " "); token; token = strtok(NULL, " ")) { // " ,"
+    for (char *token = strtok(input, " "); token;
+         token = strtok(NULL, " ")) { // " ,"
 
         // Get matrix identifier
         if (strlen(token) == 1)
@@ -780,7 +794,8 @@ Matrix sub(char input[], Matrix workspace[], Matrix ans) {
             if (isNull(ans) && (argv[0] == ANS || argv[1] == ANS)) {
                 printf("Error: perform an operation before attempting to use "
                        "ans.\n");
-            } else if (isNull(operands[0]) || isNull(operands[1])) { // Operand is null
+            } else if (isNull(operands[0]) ||
+                       isNull(operands[1])) { // Operand is null
                 printf("Error: operand not recognized.\n");
             } else {
                 printf("Error: incompatible operands. Try again with "
@@ -802,7 +817,8 @@ Matrix mul(char input[], Matrix workspace[], Matrix ans) {
     char argv[MAX];
 
     // Split input
-    for (char *token = strtok(input, " "); token; token = strtok(NULL, " ")) { // " ,"
+    for (char *token = strtok(input, " "); token;
+         token = strtok(NULL, " ")) { // " ,"
 
         // Get matrix identifier
         if (strlen(token) == 1)
@@ -830,7 +846,8 @@ Matrix mul(char input[], Matrix workspace[], Matrix ans) {
             if (isNull(ans) && (argv[0] == ANS || argv[1] == ANS)) {
                 printf("Error: perform an operation before attempting to use "
                        "ans.\n");
-            } else if (isNull(operands[0]) || isNull(operands[1])) { // Operand is null
+            } else if (isNull(operands[0]) ||
+                       isNull(operands[1])) { // Operand is null
                 printf("Error: operand not recognized.\n");
             } else {
                 printf("Error: incompatible operands. Try again with "
@@ -866,7 +883,8 @@ Matrix scl(char input[], Matrix workspace[], Matrix ans) {
     }
 
     // Split further input
-    for (char *token = strtok(NULL, " "); token; token = strtok(NULL, " ")) { // " ,"
+    for (char *token = strtok(NULL, " "); token;
+         token = strtok(NULL, " ")) { // " ,"
 
         // Get matrix identifier
         if (strlen(token) == 1)
@@ -913,7 +931,8 @@ Matrix trnsp(char input[], Matrix workspace[], Matrix ans) {
     char argv[MAX];
 
     // Split input
-    for (char *token = strtok(input, " "); token; token = strtok(NULL, " ")) { // " ,"
+    for (char *token = strtok(input, " "); token;
+         token = strtok(NULL, " ")) { // " ,"
 
         // Get matrix identifier
         if (strlen(token) == 1)
@@ -960,7 +979,8 @@ Matrix inv(char input[], Matrix workspace[], Matrix ans) {
     char argv[MAX];
 
     // Split input
-    for (char *token = strtok(input, " "); token; token = strtok(NULL, " ")) { // " ,"
+    for (char *token = strtok(input, " "); token;
+         token = strtok(NULL, " ")) { // " ,"
 
         // Get matrix identifier
         if (strlen(token) == 1)
@@ -1013,7 +1033,8 @@ Matrix det(char input[], Matrix workspace[], Matrix ans) {
     char argv[MAX];
 
     // Split input
-    for (char *token = strtok(input, " "); token; token = strtok(NULL, " ")) { // " ,"
+    for (char *token = strtok(input, " "); token;
+         token = strtok(NULL, " ")) { // " ,"
 
         // Get matrix identifier
         if (strlen(token) == 1)
@@ -1041,7 +1062,8 @@ Matrix det(char input[], Matrix workspace[], Matrix ans) {
             }
 
             // Check if input is incorrectly zero
-            if ((output.m == 1) && (output.n == 1) && (output.data[0][0] == 0)) {
+            if ((output.m == 1) && (output.n == 1) &&
+                (output.data[0][0] == 0)) {
                 // Check if ans was used while null
                 if (isNull(ans) && (argv[0] == ANS)) {
                     printf("Error: perform an operation before attempting to "
@@ -1073,7 +1095,8 @@ Matrix trc(char input[], Matrix workspace[], Matrix ans) {
     char argv[MAX];
 
     // Split input
-    for (char *token = strtok(input, " "); token; token = strtok(NULL, " ")) { // " ,"
+    for (char *token = strtok(input, " "); token;
+         token = strtok(NULL, " ")) { // " ,"
 
         // Get matrix identifier
         if (strlen(token) == 1)
@@ -1101,7 +1124,8 @@ Matrix trc(char input[], Matrix workspace[], Matrix ans) {
             }
 
             // Check if input is incorrectly zero
-            if ((output.m == 1) && (output.n == 1) && (output.data[0][0] == 0)) {
+            if ((output.m == 1) && (output.n == 1) &&
+                (output.data[0][0] == 0)) {
                 // Check if ans was used while null
                 if (isNull(ans) && (argv[0] == ANS)) {
                     printf("Error: perform an operation before attempting to "
