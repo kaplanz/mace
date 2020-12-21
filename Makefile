@@ -23,27 +23,45 @@
 #
 
 # --------------------------------
-#            Variables
+#          Configuration
 # --------------------------------
 
 # Root directory
 ROOT ?= .
+# Makefiles
+MAKEFILE = $(firstword $(MAKEFILE_LIST))
+CAKEFILE = $(ROOT)/Cake.mk
+
+# Include user config
+-include $(CAKEFILE)
+
+# Package
+NAME    ?= $(shell basename "$(PWD)")
+VERSION ?= $(shell date +%s)
+
+
+# --------------------------------
+#            Variables
+# --------------------------------
+
 # Input directories
 INCLUDE ?= $(ROOT)/include
-LIB ?= $(ROOT)/lib
-SRC ?= $(ROOT)/src
-TEST ?= $(ROOT)/test
+LIB     ?= $(ROOT)/lib
+SRC     ?= $(ROOT)/src
+TEST    ?= $(ROOT)/test
 # Build directories
 BUILD ?= $(ROOT)/build
 # Build subdirectories (absolute)
 BINLINK := $(BUILD)/../bin
 # Build subdirectories (relative)
-ARC = $(BUILD)/lib
 BIN = $(BUILD)/bin
 DEP = $(BUILD)/dep
+LID = $(BUILD)/lib
 OBJ = $(BUILD)/obj
 # Search directories
-INCLUDES := $(addprefix -I,$(INCLUDE))
+INCLUDES  = $(addprefix -I,$(INCLUDE))
+LIBRARIES = $(addprefix -L,$(LIB))
+LIBLINKS  = $(addprefix -l,$(notdir $(LIDS)))
 
 # Sources
 HEADERS := $(shell find -L $(ROOT) -name "*.h")
@@ -52,35 +70,48 @@ SOURCES := $(shell find -L $(ROOT) -name "*.c")
 LIBS := $(filter $(LIB)/%,$(SOURCES))
 SRCS := $(filter $(SRC)/%,$(SOURCES))
 TSTS := $(filter $(TEST)/%,$(SOURCES))
-# Intermediate targets
-ARCS := $(sort $(patsubst %/,%,$(dir $(LIBS))))
-# Targets
-ARCHS = $(ARCS:$(LIB)/%=$(ARC)/lib%.a)
-BINS = $(SRCS:$(SRC)/%.c=$(BIN)/%)
-DEPS = $(OBJS:$(OBJ)/%.o=$(DEP)/%.d)
-OBJS = $(LIBS:$(LIB)/%.c=$(OBJ)/%.o) $(SRCS:$(SRC)/%.c=$(OBJ)/%.o)
-TESTS = $(TSTS:$(ROOT)/%.c=$(BIN)/%)
+# Library targets
+LIDS   := $(sort $(patsubst %/,%,$(dir $(LIBS))))
+LIDARS  = $(LIDS:$(LIB)/%=$(LID)/lib%.a)
+LIDSOS  = $(LIDS:$(LIB)/%=$(LID)/lib%.so)
+# Object targets
+LIBOS = $(LIBS:$(LIB)/%.c=$(OBJ)/%.o)
+SRCOS = $(SRCS:$(SRC)/%.c=$(OBJ)/%.o)
+TSTOS = $(TSTS:$(ROOT)/%.c=$(OBJ)/%.o)
+OBJS  = $(LIBOS) $(SRCOS)
+# Primary targets
+BINS  = $(SRCOS:$(OBJ)/%.o=$(BIN)/%)
+DEPS  = $(OBJS:$(OBJ)/%.o=$(DEP)/%.d)
+TESTS = $(TSTOS:$(OBJ)/%.o=$(BIN)/%)
+# Secondary targets
+TAGFILE   ?= $(BUILD)/tags
+TARFILE   ?= $(NAME)-$(VERSION)
+DISTFILES ?= $(or $(shell [ -d $(ROOT)/.git ] && git ls-files), \
+                  $(MAKEFILE_LIST) $(HEADERS) $(SOURCES))
 
 # Commands
 CHECK = clang-tidy
-FIX = clang-tidy --fix-errors
-FMT = clang-format --verbose -i
-LN = ln -sf
+FIX   = clang-tidy --fix-errors
+FMT   = clang-format --verbose -i
+LN    = ln -sf
 MKDIR = mkdir -p
-RM = rm -rfv
+RM    = rm -rf
+TAGS  = ctags
+TAR   = tar
 # Compiler
-AR = ar
-CC = cc
+AR  = ar
+CC  = cc
 # Flags
-ARFLAGS = crs
-CFLAGS ?= -Wall -g -std=c18
+ARFLAGS   = crs
+CFLAGS   ?= -Wall -g -std=c18
 CPPFLAGS += $(INCLUDES)
-DEPFLAGS = -MM -MF $@ -MT $(OBJ)/$*.o
-LDFLAGS ?=
-LDLIBS ?=
+DEPFLAGS  = -MM -MF $@ -MT $(OBJ)/$*.o
+LDFLAGS  +=
+LDLIBS   +=
+TARFLAGS  = -zchvf
 
 # Alternate build settings
-MODES = DEBUG DEFAULT RELEASE
+MODES   = DEBUG DEFAULT RELEASE
 CONFIG ?= DEFAULT
 ifneq ($(filter $(CONFIG),$(MODES)),)
 $(CONFIG) = 1
@@ -88,22 +119,30 @@ else
 $(error unknown build: `$(CONFIG)`)
 endif
 
-ifdef DEBUG # debug build
-BUILD := $(BUILD)/debug
+ifdef DEBUG        # debug build
+BUILD    := $(BUILD)/debug
 CPPFLAGS += -O0 -g3 -DDEBUG
 else ifdef RELEASE # release build
-BUILD := $(BUILD)/release
+BUILD    := $(BUILD)/release
 CPPFLAGS += -O3 -g0 -DNDEBUG
 endif
 
 
 # --------------------------------
-#              Rules
+#           Build Rules
 # --------------------------------
 
-# Build all executables
+# Explicitly set default goal
+.DEFAULT_GOAL := all
+
+# Build all goals
 .PHONY: all
-all: $(BINS)
+all: bin dep lib obj $(TESTS)
+
+# Clean build directory
+.PHONY: clean
+clean:
+	@$(RM) -v $(BINLINK) $(BUILD)
 
 # Make alternate builds
 .PHONY: debug
@@ -116,8 +155,17 @@ release: export RELEASE = 1
 release:
 	@$(MAKE) all
 
+
+# --------------------------------
+#          Primary Rules
+# --------------------------------
+
+# Build executables
+.PHONY: bin
+bin: $(BINS)
+
 # Link target executables
-$(BIN)/%: $(OBJ)/%.o $(ARCHS) | $(BINLINK)/%
+$(BIN)/%: $(OBJ)/%.o $(LIDARS) | $(BINLINK)/%
 	@$(MKDIR) $(@D)
 	$(LINK.c) -o $@ $^ $(LDLIBS)
 
@@ -125,7 +173,7 @@ $(BINLINK)/%: FORCE
 	@$(MKDIR) $(@D)
 	@$(LN) $(shell realpath -m $(BIN)/$* --relative-to $(@D)) $@
 
-# Run target executables
+# Run target executable
 %: $(BIN)/% FORCE ; @$< $(ARGS)
 
 # Generate dependency files
@@ -134,7 +182,29 @@ dep: $(DEPS)
 
 $(DEP)/%.d: %.c
 	@$(MKDIR) $(@D)
-	$(COMPILE.c) $(DEPFLAGS) $<
+	@$(LINK.c) $(DEPFLAGS) $<
+
+# Create libraries
+.PHONY: lib
+lib: $(LIDARS) $(LIDSOS)
+
+$(LIBOS): CPPFLAGS += -fPIC # compile libraries with PIC
+
+# Combine library archives
+.SECONDEXPANSION:
+$(LID)/lib%.a: $$(filter $(OBJ)/%/$$(PERCENT),$(OBJS)) | $(LIB)/%/*
+	@$(MKDIR) $(@D)
+	$(AR) $(ARFLAGS) $@ $^
+
+# Link library shared objects
+.SECONDEXPANSION:
+$(LID)/lib%.so: LDFLAGS += -shared
+$(LID)/lib%.so: $$(filter $(OBJ)/%/$$(PERCENT),$(OBJS)) | $(LIB)/%/*
+	@$(MKDIR) $(@D)
+	$(LINK.c) -o $@ $^ $(LDLIBS)
+
+# Create target library
+%: $(LID)/lib%.a $(LID)/lib%.so FORCE ;
 
 # Compile object files
 .PHONY: obj
@@ -144,32 +214,35 @@ $(OBJ)/%.o: %.c | $(DEP)/%.d
 	@$(MKDIR) $(@D)
 	$(COMPILE.c) -o $@ $<
 
-# Create library archives
-.PHONY: lib
-lib: $(ARCHS)
-
-.SECONDEXPANSION:
-$(ARC)/lib%.a: $$(filter $(OBJ)/%/$$(PERCENT),$(OBJS)) | $(LIB)/%/*
-	@$(MKDIR) $(@D)
-	$(AR) $(ARFLAGS) $@ $^
-
-# Create target archive
-%: $(ARC)/lib%.a FORCE ;
-
-# Compile tests
+# Compile and run tests
 .PHONY: test
 test: $(TESTS)
-	$(foreach TEST,$^,$(TEST))
+	$(foreach TEST,$^,$(TEST);)
 
-# Clean build directory
-.PHONY: clean
-clean:
-	@$(RM) $(BINLINK) $(BUILD)
+
+# --------------------------------
+#         Secondary Rules
+# --------------------------------
 
 # Check sources
 .PHONY: check
 check:
 	@$(CHECK) $(SOURCES) -- $(INCLUDES)
+
+# Create distribution tar file
+.PHONY: dist
+dist: $(BUILD)/$(TARFILE).tar.gz
+
+$(BUILD)/$(TARFILE).tar.gz: $(TARFILE)
+	@$(MKDIR) $(@D)
+	@$(TAR) $(TARFLAGS) $@ $<
+	@$(RM) $<
+
+$(TARFILE): $(DISTFILES:%=$(TARFILE)/%)
+
+$(TARFILE)/%: %
+	@$(MKDIR) $(@D)
+	@$(LN) $(shell realpath -m $< --relative-to $(@D)) $@
 
 # Fix sources
 .PHONY: fix
@@ -181,13 +254,21 @@ fix:
 fmt:
 	@$(FMT) $(HEADERS) $(SOURCES)
 
+# Generate tag files
+.PHONY: tag
+tag: $(TAGFILE)
+
+$(TAGFILE): $(HEADERS) $(SOURCES)
+	@$(MKDIR) $(dir $(TAGFILE))
+	@$(TAGS) -f $@ $^
+
 
 # --------------------------------
 #              Extras
 # --------------------------------
 
 # Search path
-vpath %.c $(LIB) $(ROOT) $(SRC)
+vpath %.c $(LIB) $(ROOT) $(SRC) $(TEST)
 
 # Special variables
 PERCENT := %
@@ -205,4 +286,6 @@ FORCE: # force implicit pattern rules
 .SUFFIXES: # delete the default suffixes
 
 # Includes
+ifneq ($(MAKECMDGOALS),clean)
 include $(wildcard $(DEPS))
+endif
