@@ -1,10 +1,7 @@
-//
-//  matrix.c
-//  Matrix arithmetic operations.
-//
-//  Created by Zakhary Kaplan on 2019-04-28.
-//  Copyright © 2019 Zakhary Kaplan. All rights reserved.
-//
+// File:        matrix.c
+// Author:      Zakhary Kaplan <https://zakharykaplan.ca>
+// Created:     28 Apr 2019
+// SPDX-License-Identifier: NONE
 
 #include "mace/matrix.h"
 

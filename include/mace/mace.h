@@ -1,10 +1,7 @@
-//
-//  mace.h
-//  Matrix Arithmetic C-language Environment (Mace).
-//
-//  Created by Zakhary Kaplan on 2019-04-25.
-//  Copyright © 2019 Zakhary Kaplan. All rights reserved.
-//
+// File:        mace.h
+// Author:      Zakhary Kaplan <https://zakharykaplan.ca>
+// Created:     25 Apr 2019
+// SPDX-License-Identifier: NONE
 
 #ifndef MACE_H
 #define MACE_H

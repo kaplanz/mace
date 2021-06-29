@@ -1,10 +1,7 @@
-//
-//  matrix.h
-//  Header for matrix arithmetic operations.
-//
-//  Created by Zakhary Kaplan on 2019-04-28.
-//  Copyright © 2019 Zakhary Kaplan. All rights reserved.
-//
+// File:        matrix.h
+// Author:      Zakhary Kaplan <https://zakharykaplan.ca>
+// Created:     28 Apr 2019
+// SPDX-License-Identifier: NONE
 
 #ifndef MATRIX_H
 #define MATRIX_H

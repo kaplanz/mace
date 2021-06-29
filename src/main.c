@@ -1,10 +1,7 @@
-//
-//  main.c
-//  Matrix Arithmetic C-language Environment (Mace).
-//
-//  Created by Zakhary Kaplan on 2020-06-21.
-//  Copyright © 2020 Zakhary Kaplan. All rights reserved.
-//
+// File:        main.c
+// Author:      Zakhary Kaplan <https://zakharykaplan.ca>
+// Created:     21 Jun 2020
+// SPDX-License-Identifier: NONE
 
 #include <stdlib.h>
 
