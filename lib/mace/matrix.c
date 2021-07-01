@@ -150,7 +150,7 @@ Matrix inverse(Matrix A) {
     for (int i = 0; i < A.m; i++) {
         for (int j = 0; j < A.n; j++) {
             int sign = ((i + j) % 2) ? -1 : 1; // determine sign of term
-            Matrix minorA = minor(A, i, j); // create minor at index
+            Matrix minorA = minor(A, i, j);    // create minor at index
 
             // Add determinant of minor to total
             cofactorA.data[i][j] = sign * determinant(minorA);
@@ -263,7 +263,7 @@ double determinant(Matrix A) {
 
     // Uses first row for determinant
     for (int i = 0; i < A.n; i++) {
-        int sign = (i % 2) ? -1 : 1; // determine sign of term
+        int sign = (i % 2) ? -1 : 1;    // determine sign of term
         Matrix minorA = minor(A, 0, i); // create minor at index
 
         // Add determinant of minor to total

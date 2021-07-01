@@ -3,12 +3,8 @@
 // Created:     21 Jun 2020
 // SPDX-License-Identifier: NONE
 
-#include <stdlib.h>
-
 #include "mace/mace.h"
 
 int main(void) {
     mace();
-
-    return EXIT_SUCCESS;
 }
