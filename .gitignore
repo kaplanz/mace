@@ -52,8 +52,9 @@ Mkfile.old
 dkms.conf
 
 # Build directories
-bin/
-build/
+/bin/
+/build/
+/lib/
 
 # Tag index files
 tags
