@@ -1,5 +1,5 @@
 // File:        main.c
-// Author:      Zakhary Kaplan <https://zakharykaplan.ca>
+// Author:      Zakhary Kaplan <https://zakhary.dev>
 // Created:     21 Jun 2020
 // SPDX-License-Identifier: NONE
 
