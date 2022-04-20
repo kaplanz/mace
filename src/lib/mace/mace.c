@@ -38,7 +38,7 @@ void mace(void) {
         fgets(userInput, MAX, stdin);
         strtok(userInput, "\n"); // remove newline from input
 
-        // Store user inout as token to be processed
+        // Store user input as token to be processed
         char *token = userInput;
 
         // Validate input type
@@ -269,7 +269,7 @@ void help(char input[]) {
 
     if (helpCommandType == -1) {
         printf("\nNo help entry found for: %s\n", argv);
-        printf("Use \"help\" to see a list of avalible commands.\n\n");
+        printf("Use \"help\" to see a list of available commands.\n\n");
         return;
     } else if (helpCommandType) {
         printf("\nHelp menu: %s\n\n", argv);
@@ -285,7 +285,7 @@ void help(char input[]) {
 
             printf("Parameters: string command (optional)\n");
 
-            printf("Exmaple: help mat\n");
+            printf("Example: help mat\n");
             break;
 
         case 2: // "bye"
@@ -303,7 +303,7 @@ void help(char input[]) {
                    "a matrix in the workspace.\n");
             printf("\t- They can be written in either capital, or "
                    "lowercase,\n");
-            printf("\t  and may be preceeded Mat (e.g. MatA).\n");
+            printf("\t  and may be proceeded by Mat (e.g. MatA).\n");
             printf("\t- The ans matrix can be written as MatAns, or ans.\n");
 
             printf("Examples:\n");
@@ -361,7 +361,7 @@ void help(char input[]) {
                    "a matrix in the workspace.\n");
             printf("\t- They can be written in either capital, or "
                    "lowercase,\n");
-            printf("\t  and may be preceeded Mat (e.g. MatA).\n");
+            printf("\t  and may be proceeded by Mat (e.g. MatA).\n");
             printf("\t- The ans matrix can be written as MatAns, or ans.\n");
 
             printf("Examples:\n");
@@ -379,7 +379,7 @@ void help(char input[]) {
                    "a matrix in the workspace.\n");
             printf("\t- They can be written in either capital, or "
                    "lowercase,\n");
-            printf("\t  and may be preceeded Mat (e.g. MatA).\n");
+            printf("\t  and may be proceeded by Mat (e.g. MatA).\n");
             printf("\t- The ans matrix can be written as MatAns, or ans.\n");
 
             printf("Examples:\n");
@@ -397,7 +397,7 @@ void help(char input[]) {
                    "a matrix in the workspace.\n");
             printf("\t- They can be written in either capital, or "
                    "lowercase,\n");
-            printf("\t  and may be preceeded Mat (e.g. MatA).\n");
+            printf("\t  and may be proceeded by Mat (e.g. MatA).\n");
             printf("\t- The ans matrix can be written as MatAns, or ans.\n");
 
             printf("Examples:\n");
@@ -415,7 +415,7 @@ void help(char input[]) {
                    "a matrix in the workspace.\n");
             printf("\t- They can be written in either capital, or "
                    "lowercase,\n");
-            printf("\t  and may be preceeded Mat (e.g. MatA).\n");
+            printf("\t  and may be proceeded by Mat (e.g. MatA).\n");
             printf("\t- The ans matrix can be written as MatAns, or ans.\n");
 
             printf("Examples:\n");
@@ -433,7 +433,7 @@ void help(char input[]) {
                    "a matrix in the workspace.\n");
             printf("\t- They can be written in either capital, or "
                    "lowercase,\n");
-            printf("\t  and may be preceeded Mat (e.g. MatA).\n");
+            printf("\t  and may be proceeded by Mat (e.g. MatA).\n");
             printf("\t- The ans matrix can be written as MatAns, or ans.\n");
 
             printf("Examples:\n");
@@ -451,7 +451,7 @@ void help(char input[]) {
                    "a matrix in the workspace.\n");
             printf("\t- They can be written in either capital, or "
                    "lowercase,\n");
-            printf("\t  and may be preceeded Mat (e.g. MatA).\n");
+            printf("\t  and may be proceeded by Mat (e.g. MatA).\n");
             printf("\t- The ans matrix can be written as MatAns, or ans.\n");
 
             printf("Examples:\n");
@@ -469,7 +469,7 @@ void help(char input[]) {
                    "a matrix in the workspace.\n");
             printf("\t- They can be written in either capital, or "
                    "lowercase,\n");
-            printf("\t  and may be preceeded Mat (e.g. MatA).\n");
+            printf("\t  and may be proceeded by Mat (e.g. MatA).\n");
             printf("\t- The ans matrix can be written as MatAns, or ans.\n");
 
             printf("Examples:\n");
@@ -487,7 +487,7 @@ void help(char input[]) {
                    "a matrix in the workspace.\n");
             printf("\t- They can be written in either capital, or "
                    "lowercase,\n");
-            printf("\t  and may be preceeded Mat (e.g. MatA).\n");
+            printf("\t  and may be proceeded by Mat (e.g. MatA).\n");
             printf("\t- The ans matrix can be written as MatAns, or ans.\n");
 
             printf("Examples:\n");

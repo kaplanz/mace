@@ -17,7 +17,7 @@
 // TODO: Fix memory leaks on all functions that return a matrix
 
 Matrix identityMat(int n) {
-    // Return NULL for invalid dimenstion
+    // Return NULL for invalid dimension
     if (n < 1)
         return NULL_MATRIX;
 
@@ -48,7 +48,7 @@ Matrix identityMat(int n) {
 }
 
 Matrix emptyMat(int m, int n) {
-    // Return NULL for invalid dimenstions
+    // Return NULL for invalid dimensions
     if (m < 1 || n < 1)
         return NULL_MATRIX;
 
@@ -174,7 +174,7 @@ Matrix inverse(Matrix A) {
 }
 
 Matrix minor(Matrix A, int row, int col) {
-    // Return early on bad minor indicies
+    // Return early on bad minor indices
     if (row >= A.m || row < 0 || col >= A.n || col < 0)
         return NULL_MATRIX;
 
@@ -187,7 +187,7 @@ Matrix minor(Matrix A, int row, int col) {
     // Copy data to minor
     for (int i = 0; i < minorA.m; i++) {
         for (int j = 0; j < minorA.n; j++) {
-            // For data or original matrix, add 1 to indicies after row, col
+            // For data or original matrix, add 1 to indices after row, col
             // to be removed
             minorA.data[i][j] = A.data[i + (i >= row)][j + (j >= col)];
         }
@@ -210,7 +210,7 @@ Matrix coeffMat(double coeff, Matrix A) {
 }
 
 Matrix addMat(Matrix A, Matrix B) {
-    // Return early on mismatched dimenstions
+    // Return early on mismatched dimensions
     if ((A.m != B.m) || (A.n != B.n))
         return NULL_MATRIX;
 
@@ -226,7 +226,7 @@ Matrix addMat(Matrix A, Matrix B) {
 }
 
 Matrix mulMat(Matrix A, Matrix B) {
-    // Return early on mismatched dimenstions
+    // Return early on mismatched dimensions
     if (A.n != B.m)
         return NULL_MATRIX;
 
@@ -247,7 +247,7 @@ Matrix mulMat(Matrix A, Matrix B) {
 
 // -- Special arithmetic --
 double determinant(Matrix A) {
-    // Return early on bad dimenstions
+    // Return early on bad dimensions
     if (!isSquare(A))
         return 0;
 
@@ -276,7 +276,7 @@ double determinant(Matrix A) {
 }
 
 double trace(Matrix A) {
-    // Return early on bad dimenstions
+    // Return early on bad dimensions
     if (!isSquare(A))
         return 0;
 
